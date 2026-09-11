@@ -78,13 +78,18 @@
   mask-image: var(--hem);
 }
 
+/*
+ * Sits in the open sky beneath the arch crown rather than crowding it. The
+ * arch opening widens as it descends, so the type gets more room here than it
+ * would higher up.
+ */
 .copy {
   position: absolute;
   z-index: 4;
-  top: max(7svh, 3.25rem);
+  top: max(19svh, 6.5rem);
   left: 50%;
   translate: -50% 0;
-  width: 86%;
+  width: 88%;
   text-align: center;
   will-change: transform, opacity;
 }

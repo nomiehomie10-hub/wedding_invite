@@ -27,7 +27,7 @@ export const wedding = {
   },
 
   bride: {
-    name: "Dr. Sobia Marium",
+    name: "Dr. Sobia Mariam",
     shortName: "Sobia",
     initial: "S",
     parents: "Mr. & Mrs. Lt. Col (Retired) Ghulam Farooq",
@@ -108,5 +108,5 @@ export type WeddingEvent = Wedding["events"][number];
 /** "F & S" — used on the wax seal and the closing monogram. */
 export const monogram = `${wedding.groom.initial} & ${wedding.bride.initial}`;
 
-/** Formal pairing, e.g. "Farhanullah Khan & Dr. Sobia Marium". */
+/** Formal pairing, e.g. "Farhanullah Khan & Dr. Sobia Mariam". */
 export const coupleNames = `${wedding.groom.name} & ${wedding.bride.name}`;
