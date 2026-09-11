@@ -1,0 +1,104 @@
+.timeline {
+  position: relative;
+  padding-block: 1rem 2rem;
+}
+
+/* The spine. A static hairline the gold line draws itself along. */
+.spine,
+.spineFill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  translate: -50% 0;
+}
+
+.spine {
+  background: color-mix(in srgb, var(--color-gold-champagne) 22%, transparent);
+}
+
+.spineFill {
+  background: linear-gradient(
+    to bottom,
+    var(--color-gold-champagne),
+    var(--color-gold-antique)
+  );
+  transform-origin: 50% 0;
+  transform: scaleY(0);
+  will-change: transform;
+}
+
+.row {
+  position: relative;
+  display: grid;
+  /* Illustration and text swap sides row to row, around the central spine. */
+  grid-template-columns: 1fr 2rem 1fr;
+  align-items: center;
+  column-gap: 0;
+  padding-block: clamp(0.4rem, 1.6vw, 0.75rem);
+}
+
+.node {
+  grid-column: 2;
+  justify-self: center;
+  display: grid;
+  place-items: center;
+}
+
+.side {
+  min-width: 0;
+}
+
+.sideText {
+  padding-inline: clamp(0.5rem, 3vw, 1.25rem);
+}
+
+.sideArt {
+  padding-inline: clamp(0.25rem, 2vw, 1rem);
+}
+
+/* Odd rows put the text on the right, even rows on the left. */
+.textLeft {
+  grid-column: 1;
+  text-align: right;
+}
+
+.textRight {
+  grid-column: 3;
+  text-align: left;
+}
+
+.artLeft {
+  grid-column: 1;
+}
+
+.artRight {
+  grid-column: 3;
+}
+
+.time {
+  font-family: var(--font-script);
+  font-size: clamp(1.15rem, 5.4vw, 1.6rem);
+  color: var(--color-gold-antique);
+  line-height: 1.2;
+  padding-bottom: 0.06em;
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: clamp(0.86rem, 3.5vw, 1.02rem);
+  font-weight: 400;
+  line-height: 1.45;
+  color: var(--color-espresso);
+  margin-top: 0.2rem;
+  text-wrap: balance;
+}
+
+.illustration {
+  width: 100%;
+  max-width: clamp(5.5rem, 26vw, 8.25rem);
+  height: auto;
+  margin-inline: auto;
+  opacity: 0.92;
+}

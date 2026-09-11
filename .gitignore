@@ -1,0 +1,20 @@
+# dependencies
+node_modules
+
+# build output
+.next
+out
+.vercel
+
+# local
+.env*.local
+.DS_Store
+*.tsbuildinfo
+next-env.d.ts
+
+# QA artefacts
+.qa-shots
+
+# Third-party design reference (a screen recording of someone else's work).
+# Kept locally as the brief; not ours to redistribute.
+assets/reference

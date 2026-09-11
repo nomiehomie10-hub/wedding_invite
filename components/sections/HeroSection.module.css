@@ -1,0 +1,165 @@
+.hero {
+  position: relative;
+  height: 100svh;
+  /* Old iOS Safari and desktop fallback. */
+  min-height: 34rem;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/*
+ * The invitation window. On a phone this is the full screen; on a desktop it
+ * stays an invitation-shaped portrait plate with paper either side, rather
+ * than stretching a mobile layout across 1920px.
+ */
+.window {
+  position: relative;
+  width: min(100vw, 34rem);
+  height: 100%;
+  overflow: hidden;
+}
+
+.plateEdge {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  /* Only drawn once the plate no longer reaches the screen edges. */
+  box-shadow: 0 0 60px -20px rgba(90, 68, 48, 0.35) inset;
+}
+
+@media (min-width: 34rem) {
+  .plateEdge {
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--color-gold-champagne) 30%, transparent),
+      0 0 90px -30px rgba(90, 68, 48, 0.45) inset,
+      0 40px 80px -50px rgba(74, 58, 44, 0.5);
+  }
+}
+
+.image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 42%;
+  transform-origin: 50% 40%;
+  will-change: transform;
+}
+
+/* Lifts the type off the sky without dulling the photograph. */
+.wash {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(251, 247, 242, 0.72) 0%,
+    rgba(251, 247, 242, 0.34) 26%,
+    rgba(251, 247, 242, 0) 52%
+  );
+}
+
+/*
+ * Hands the hero over to the paper of the next stage.
+ *
+ * The plate is masked rather than covered with a matching gradient: fading to
+ * a fixed colour leaves a hairline wherever the page background has drifted
+ * from it, whereas fading to transparent lets the real paper show through and
+ * cannot seam.
+ */
+.window {
+  --hem: linear-gradient(to bottom, #000 0%, #000 72%, rgba(0, 0, 0, 0.55) 88%, transparent 100%);
+  -webkit-mask-image: var(--hem);
+  mask-image: var(--hem);
+}
+
+.copy {
+  position: absolute;
+  z-index: 4;
+  top: max(7svh, 3.25rem);
+  left: 50%;
+  translate: -50% 0;
+  width: 86%;
+  text-align: center;
+  will-change: transform, opacity;
+}
+
+.welcome {
+  color: color-mix(in srgb, var(--color-espresso) 68%, transparent);
+}
+
+.ceremony {
+  font-family: var(--font-script);
+  font-size: clamp(1.6rem, 6.6vw, 2.15rem);
+  line-height: 1.15;
+  color: var(--color-gold-antique);
+  margin: 0.55rem 0 0;
+  padding-bottom: 0.1em;
+}
+
+.of {
+  font-style: italic;
+  font-size: clamp(0.85rem, 3vw, 1rem);
+  color: var(--color-ink);
+  margin: 0.4rem 0 0.1rem;
+}
+
+.name {
+  font-family: var(--font-script);
+  font-size: clamp(2.9rem, 13vw, 4.4rem);
+  line-height: 0.98;
+  color: var(--color-espresso);
+  margin: 0;
+  padding-bottom: 0.08em;
+  text-shadow: 0 1px 14px rgba(251, 247, 242, 0.9);
+}
+
+.amp {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(1.1rem, 4vw, 1.4rem);
+  color: var(--color-gold-antique);
+  margin: 0.12em 0;
+  display: block;
+}
+
+.indicator {
+  position: absolute;
+  z-index: 4;
+  left: 50%;
+  translate: -50% 0;
+  bottom: max(2.25rem, env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  will-change: opacity;
+}
+
+.indicatorText {
+  font-family: var(--font-script);
+  font-size: clamp(1rem, 3.6vw, 1.15rem);
+  color: var(--color-gold-antique);
+  padding-bottom: 0.08em;
+}
+
+.chevron {
+  animation: drift 2.8s ease-in-out infinite;
+}
+
+@keyframes drift {
+  0%, 100% { transform: translateY(-2px); opacity: 0.5; }
+  50% { transform: translateY(2px); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chevron {
+    animation: none;
+    opacity: 0.75;
+  }
+}

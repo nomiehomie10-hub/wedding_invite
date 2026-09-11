@@ -1,0 +1,370 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   1. TOKENS
+   One palette, one spacing rhythm, one gold. Every stage of the invitation
+   draws from this and nothing else.
+   ========================================================================== */
+
+@theme {
+  --color-ivory: #f7f1ea;
+  --color-paper: #f4ece5;
+  --color-paper-light: #fbf7f2;
+  --color-blush: #ede0da;
+  --color-espresso: #332a27;
+  --color-ink: #756963;
+  --color-gold-antique: #9c8060;
+  --color-gold-champagne: #b69a73;
+  --color-gold-foil: #d7c3a4;
+
+  --font-serif: var(--font-cormorant), "Cormorant Garamond", "Times New Roman", serif;
+  --font-script: var(--font-script), "Snell Roundhand", "Apple Chancery", cursive;
+  --font-arabic: var(--font-arabic), "Geeza Pro", "Times New Roman", serif;
+  --font-label: var(--font-label), ui-sans-serif, system-ui, sans-serif;
+
+  /* A single vertical rhythm shared by every section. */
+  --space-stage: clamp(4.5rem, 13vw, 8rem);
+
+  --ease-paper: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-fold: cubic-bezier(0.42, 0, 0.16, 1);
+}
+
+/* ==========================================================================
+   2. BASE
+   ========================================================================== */
+
+:root {
+  color-scheme: light;
+  /* Filled by JS with the true viewport height so 100svh gaps never appear
+     behind iOS browser chrome. */
+  --vh-unit: 1svh;
+}
+
+* {
+  min-width: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-ivory);
+  color: var(--color-espresso);
+  font-family: var(--font-serif);
+  font-weight: 300;
+  line-height: 1.7;
+  /* Horizontal overflow is fatal to a full-bleed decorative layout — the whole
+     document is clipped on the X axis rather than relying on per-section care. */
+  overflow-x: clip;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/*
+ * While the invitation is still sealed the letter beneath must not scroll.
+ * Locked on both elements because which one actually scrolls varies by browser,
+ * and the state lives on <html> so a pre-hydration script can set it.
+ */
+html[data-sealed="true"],
+html[data-sealed="true"] body,
+html[data-sealed="opening"],
+html[data-sealed="opening"] body {
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+/*
+ * The letter rises into view while the flaps are still moving, so the fold
+ * opens onto the hero rather than onto an empty frame that cross-fades to it
+ * a beat later.
+ */
+#invitation {
+  opacity: 1;
+  transition:
+    opacity 1000ms var(--ease-paper),
+    transform 1200ms var(--ease-paper);
+}
+
+html[data-sealed="true"] #invitation {
+  opacity: 0;
+  transform: scale(1.04);
+  transition: none;
+}
+
+html[data-sealed="opening"] #invitation {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Already opened this session: the envelope is gone before it can be seen. */
+html[data-sealed="false"] [data-envelope] {
+  display: none;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--color-gold-foil) 55%, transparent);
+  color: var(--color-espresso);
+}
+
+:focus-visible {
+  outline: 1.5px solid var(--color-gold-antique);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ==========================================================================
+   3. MATERIAL
+   Handmade paper: a warm base wash, an almost-invisible fibre grain, and a
+   soft top-light. The texture should register as weight, not as pattern.
+   ========================================================================== */
+
+.paper-ground {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      120% 80% at 50% -10%,
+      var(--color-paper-light) 0%,
+      var(--color-ivory) 45%,
+      var(--color-paper) 100%
+    );
+}
+
+/* Fibre grain. Fractal noise at very low alpha — subconscious, never visible
+   as "noise". Rendered once as a fixed layer so it never repaints on scroll. */
+.paper-ground::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.14'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+}
+
+/* A faint embossed botanical wash, deliberately huge and low-contrast so it
+   reads as a watermark pressed into the sheet. */
+.paper-emboss {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  /* Deliberately below the threshold of notice: it should read as weight in
+     the paper, never as a picture printed behind the text. */
+  opacity: 0.028;
+  background-image: url("/images/florals/frame.webp");
+  background-repeat: no-repeat;
+  background-position: center 10%;
+  background-size: 150% auto;
+  filter: grayscale(0.55) contrast(0.65) blur(1.5px);
+}
+
+/* Paper laid on paper: a card that sits a fraction of a millimetre proud. */
+.paper-card {
+  background:
+    linear-gradient(
+      168deg,
+      var(--color-paper-light) 0%,
+      var(--color-ivory) 55%,
+      var(--color-paper) 100%
+    );
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.85) inset,
+    0 -1px 0 rgba(155, 128, 96, 0.06) inset,
+    0 18px 40px -28px rgba(74, 58, 44, 0.35),
+    0 2px 6px -3px rgba(74, 58, 44, 0.1);
+}
+
+/* ==========================================================================
+   4. GOLD
+   Foil stamping, not yellow. A narrow band of champagne tones with a single
+   highlight pass — enough to catch light, never enough to glitter.
+   ========================================================================== */
+
+.foil {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-gold-antique) 0%,
+    var(--color-gold-champagne) 26%,
+    var(--color-gold-foil) 44%,
+    #f0e2cb 50%,
+    var(--color-gold-foil) 56%,
+    var(--color-gold-champagne) 74%,
+    var(--color-gold-antique) 100%
+  );
+  background-size: 220% 100%;
+  background-position: 50% 0;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.foil-surface {
+  background-image: linear-gradient(
+    118deg,
+    #c3a883 0%,
+    var(--color-gold-foil) 22%,
+    #efe1c8 38%,
+    var(--color-gold-champagne) 52%,
+    #b0916a 72%,
+    var(--color-gold-foil) 92%,
+    #c9ae88 100%
+  );
+}
+
+/* Hairline rules and dividers. */
+.rule-gold {
+  height: 1px;
+  border: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--color-gold-champagne) 70%, transparent) 22%,
+    var(--color-gold-antique) 50%,
+    color-mix(in srgb, var(--color-gold-champagne) 70%, transparent) 78%,
+    transparent
+  );
+}
+
+/* ==========================================================================
+   5. TYPOGRAPHY
+   ========================================================================== */
+
+.t-script {
+  font-family: var(--font-script);
+  font-weight: 400;
+  line-height: 1.05;
+  /* Script faces sit high in the em box; nudge the optical baseline. */
+  padding-block: 0.12em;
+}
+
+.t-label {
+  font-family: var(--font-label);
+  font-size: clamp(0.56rem, 1.7vw, 0.68rem);
+  font-weight: 400;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  line-height: 1.6;
+  color: var(--color-ink);
+}
+
+.t-caps {
+  font-family: var(--font-serif);
+  font-size: clamp(0.68rem, 2.2vw, 0.82rem);
+  font-weight: 400;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  line-height: 1.9;
+  color: var(--color-ink);
+}
+
+.t-body {
+  font-size: clamp(0.9rem, 2.8vw, 1.02rem);
+  line-height: 1.9;
+  color: var(--color-ink);
+}
+
+.t-arabic {
+  font-family: var(--font-arabic);
+  line-height: 2;
+  direction: rtl;
+}
+
+/* ==========================================================================
+   6. LAYOUT
+   A narrow, invitation-shaped column that never stretches to fill a desktop.
+   ========================================================================== */
+
+/*
+ * Each stage contributes half the rhythm at each end, so the gap between any
+ * two stages is exactly one unit and the page keeps a single vertical beat
+ * from the hero to the closing.
+ */
+.stage {
+  position: relative;
+  padding-block: calc(var(--space-stage) * 0.5);
+}
+
+/* The final stage needs floor beneath it, plus room for the home indicator. */
+.stage-last {
+  padding-bottom: max(var(--space-stage), env(safe-area-inset-bottom));
+}
+
+.column {
+  width: min(100% - 2.5rem, 34rem);
+  margin-inline: auto;
+}
+
+.column-wide {
+  width: min(100% - 2rem, 52rem);
+  margin-inline: auto;
+}
+
+/* ==========================================================================
+   7. MOTION
+   Entrances are a single shared gesture: lift, settle, resolve.
+   ========================================================================== */
+
+.reveal {
+  opacity: 0;
+  transform: translate3d(0, 20px, 0) scale(0.96);
+  transition:
+    opacity 1s var(--ease-paper),
+    transform 1.1s var(--ease-paper);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+.reveal[data-visible="true"] {
+  opacity: 1;
+  transform: translate3d(0, 0, 0) scale(1);
+}
+
+/* Once settled, drop the compositing hint so long pages stay cheap. */
+.reveal[data-settled="true"] {
+  will-change: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  /* Content must never be left invisible when its transition is neutered. */
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Visually hidden, still announced. */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
