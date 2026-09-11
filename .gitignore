@@ -7,7 +7,7 @@ out
 .vercel
 
 # local
-.env*.local
+.env*
 .DS_Store
 *.tsbuildinfo
 next-env.d.ts
