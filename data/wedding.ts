@@ -72,7 +72,7 @@ export const wedding = {
    * invitation. Set to `null` to leave it out entirely.
    */
   memorial: {
-    lead: "On this special day, we carry with us the love and memories of her beloved father,",
+    lead: "On this special day, we carry with us the love and memories of our beloved father,",
     name: "Late Col Ghulam Farooq Babai",
     tail: "whose presence we miss dearly and whose blessings we hold forever in our hearts.",
   },
