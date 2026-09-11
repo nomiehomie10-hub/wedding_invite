@@ -1,6 +1,7 @@
+import { Fragment } from "react";
 import Image from "next/image";
 import { images } from "@/data/images";
-import { wedding } from "@/data/wedding";
+import { couple, wedding } from "@/data/wedding";
 import { Ornament, OrnamentMinor } from "@/components/ui/Ornament";
 import { Reveal } from "@/components/ui/Reveal";
 import { nameSize } from "@/lib/nameFit";
@@ -17,10 +18,9 @@ const OPENING_TOP = `${Math.round(ARCH_ASPECT * CROWN_SHARE * 100)}%`;
 
 /** The last panel. Nothing after it — the invitation simply ends. */
 export function ClosingSection() {
-  const { groom, bride } = wedding;
   // First names here: the sign-off is the couple speaking, not the
   // invitation addressing its guests.
-  const size = nameSize("closing", groom.shortName, bride.shortName);
+  const size = nameSize("closing", ...couple.map((person) => person.shortName));
 
   return (
     <section
@@ -53,20 +53,28 @@ export function ClosingSection() {
              * way.
              */}
             <h2 id="closing-heading" className="mt-3 text-espresso">
-              <span className="t-script block" style={{ fontSize: size }}>
-                {groom.shortName}
-              </span>
-              <span
-                className="block font-serif text-gold-antique italic"
-                style={{ fontSize: "clamp(1rem, 3.6vw, 1.3rem)", margin: "0.1em 0" }}
-                aria-hidden="true"
-              >
-                &amp;
-              </span>
-              <span className="sr-only">and</span>
-              <span className="t-script block" style={{ fontSize: size }}>
-                {bride.shortName}
-              </span>
+              {couple.map((person, index) => (
+                <Fragment key={person.shortName}>
+                  {index > 0 && (
+                    <>
+                      <span
+                        className="block font-serif text-gold-antique italic"
+                        style={{
+                          fontSize: "clamp(1rem, 3.6vw, 1.3rem)",
+                          margin: "0.1em 0",
+                        }}
+                        aria-hidden="true"
+                      >
+                        &amp;
+                      </span>
+                      <span className="sr-only">and</span>
+                    </>
+                  )}
+                  <span className="t-script block" style={{ fontSize: size }}>
+                    {person.shortName}
+                  </span>
+                </Fragment>
+              ))}
             </h2>
           </Reveal>
 

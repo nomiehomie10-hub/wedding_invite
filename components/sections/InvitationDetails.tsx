@@ -1,6 +1,7 @@
+import { Fragment } from "react";
 import Image from "next/image";
 import { images } from "@/data/images";
-import { wedding } from "@/data/wedding";
+import { couple, wedding } from "@/data/wedding";
 import { ArchFrame } from "@/components/ui/ArchFrame";
 import { Ornament } from "@/components/ui/Ornament";
 import { Reveal } from "@/components/ui/Reveal";
@@ -13,8 +14,8 @@ import { nameSize } from "@/lib/nameFit";
  * only things here allowed to be large.
  */
 export function InvitationDetails() {
-  const { groom, bride, invitation } = wedding;
-  const size = nameSize("panel", groom.name, bride.name);
+  const { invitation } = wedding;
+  const size = nameSize("panel", ...couple.map((person) => person.name));
 
   return (
     <section className="stage" aria-labelledby="invitation-heading">
@@ -38,13 +39,24 @@ export function InvitationDetails() {
                 {wedding.ceremony.name} of
               </h2>
 
-              <Party name={groom.name} relation="Son of" parents={groom.parents} size={size} />
-
-              <p className="t-script my-1 text-gold-antique" style={{ fontSize: "clamp(1.15rem, 5vw, 1.5rem)" }}>
-                with
-              </p>
-
-              <Party name={bride.name} relation="Daughter of" parents={bride.parents} size={size} />
+              {couple.map((person, index) => (
+                <Fragment key={person.name}>
+                  {index > 0 && (
+                    <p
+                      className="t-script my-1 text-gold-antique"
+                      style={{ fontSize: "clamp(1.15rem, 5vw, 1.5rem)" }}
+                    >
+                      with
+                    </p>
+                  )}
+                  <Party
+                    name={person.name}
+                    relation={person.relation}
+                    parents={person.parents}
+                    size={size}
+                  />
+                </Fragment>
+              ))}
 
               <div className="mt-12">
                 <p

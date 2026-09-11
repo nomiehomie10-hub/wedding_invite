@@ -23,14 +23,16 @@ export const wedding = {
     name: "Farhanullah Khan",
     shortName: "Farhan",
     initial: "F",
-    parents: "Mr. & Mrs. Major (Retired) Shahid Ashraf",
+    relation: "Son of",
+    parents: "Mr. & Mrs. Major (R) Shahid Ashraf",
   },
 
   bride: {
     name: "Dr. Sobia Mariam",
     shortName: "Sobia",
     initial: "S",
-    parents: "Mr. & Mrs. Lt. Col (Retired) Ghulam Farooq",
+    relation: "Daughter of",
+    parents: "Mr. & Mrs. Col (R) Ghulam Farooq Babai",
   },
 
   date: {
@@ -71,7 +73,7 @@ export const wedding = {
    */
   memorial: {
     lead: "On this special day, we carry with us the love and memories of her beloved father,",
-    name: "Late Lt. Col Ghulam Farooq",
+    name: "Late Col Ghulam Farooq Babai",
     tail: "whose presence we miss dearly and whose blessings we hold forever in our hearts.",
   },
 
@@ -105,8 +107,18 @@ export const wedding = {
 export type Wedding = typeof wedding;
 export type WeddingEvent = Wedding["events"][number];
 
-/** "F & S" — used on the wax seal and the closing monogram. */
-export const monogram = `${wedding.groom.initial} & ${wedding.bride.initial}`;
+/**
+ * The order the two are presented in, everywhere they appear together — the
+ * wax seal, the hero, the formal panel and the sign-off.
+ *
+ * Bride first. This is the only place that order is decided; reversing this
+ * one line reverses it across the whole invitation, which is what stops the
+ * four surfaces drifting out of agreement.
+ */
+export const couple = [wedding.bride, wedding.groom] as const;
 
-/** Formal pairing, e.g. "Farhanullah Khan & Dr. Sobia Mariam". */
-export const coupleNames = `${wedding.groom.name} & ${wedding.bride.name}`;
+/** "S & F" — pressed into the wax seal. */
+export const monogram = couple.map((person) => person.initial).join(" & ");
+
+/** Formal pairing, e.g. "Dr. Sobia Mariam & Farhanullah Khan". */
+export const coupleNames = couple.map((person) => person.name).join(" & ");

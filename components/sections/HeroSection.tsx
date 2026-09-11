@@ -1,9 +1,9 @@
 "use client";
 
-import { useRef } from "react";
+import { Fragment, useRef } from "react";
 import Image from "next/image";
 import { images } from "@/data/images";
-import { wedding } from "@/data/wedding";
+import { couple, wedding } from "@/data/wedding";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useScrollProgress } from "@/hooks/useScrollProgress";
 import { nameSize } from "@/lib/nameFit";
@@ -19,7 +19,7 @@ import styles from "./HeroSection.module.css";
  */
 export function HeroSection() {
   const reduced = useReducedMotion();
-  const size = nameSize("hero", wedding.groom.name, wedding.bride.name);
+  const size = nameSize("hero", ...couple.map((person) => person.name));
   const imageRef = useRef<HTMLImageElement>(null);
   const copyRef = useRef<HTMLDivElement>(null);
   const indicatorRef = useRef<HTMLDivElement>(null);
@@ -63,16 +63,21 @@ export function HeroSection() {
           <p className={styles.of}>of</p>
 
           <h1>
-            <span className={styles.name} style={{ fontSize: size }}>
-              {wedding.groom.name}
-            </span>
-            <span className={styles.amp} aria-hidden="true">
-              &amp;
-            </span>
-            <span className="sr-only">and</span>
-            <span className={styles.name} style={{ fontSize: size }}>
-              {wedding.bride.name}
-            </span>
+            {couple.map((person, index) => (
+              <Fragment key={person.name}>
+                {index > 0 && (
+                  <>
+                    <span className={styles.amp} aria-hidden="true">
+                      &amp;
+                    </span>
+                    <span className="sr-only">and</span>
+                  </>
+                )}
+                <span className={styles.name} style={{ fontSize: size }}>
+                  {person.name}
+                </span>
+              </Fragment>
+            ))}
           </h1>
         </div>
 
