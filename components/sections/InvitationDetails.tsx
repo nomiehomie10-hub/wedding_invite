@@ -4,6 +4,7 @@ import { wedding } from "@/data/wedding";
 import { ArchFrame } from "@/components/ui/ArchFrame";
 import { Ornament } from "@/components/ui/Ornament";
 import { Reveal } from "@/components/ui/Reveal";
+import { nameSize } from "@/lib/nameFit";
 
 /**
  * The formal panel — the words that make this an invitation rather than a page.
@@ -13,6 +14,7 @@ import { Reveal } from "@/components/ui/Reveal";
  */
 export function InvitationDetails() {
   const { groom, bride, invitation } = wedding;
+  const size = nameSize("panel", groom.name, bride.name);
 
   return (
     <section className="stage" aria-labelledby="invitation-heading">
@@ -36,13 +38,13 @@ export function InvitationDetails() {
                 {wedding.ceremony.name} of
               </h2>
 
-              <Party name={groom.name} relation="Son of" parents={groom.parents} />
+              <Party name={groom.name} relation="Son of" parents={groom.parents} size={size} />
 
               <p className="t-script my-1 text-gold-antique" style={{ fontSize: "clamp(1.15rem, 5vw, 1.5rem)" }}>
                 with
               </p>
 
-              <Party name={bride.name} relation="Daughter of" parents={bride.parents} />
+              <Party name={bride.name} relation="Daughter of" parents={bride.parents} size={size} />
 
               <div className="mt-12">
                 <p
@@ -80,21 +82,28 @@ function Party({
   name,
   relation,
   parents,
+  size,
 }: {
   name: string;
   relation: string;
   parents: string;
+  size: string;
 }) {
   return (
     <div className="mt-7">
       <p
         className="t-script text-espresso"
-        style={{ fontSize: "clamp(2.5rem, 12vw, 3.6rem)", lineHeight: 1 }}
+        style={{ fontSize: size, lineHeight: 1 }}
       >
         {name}
       </p>
       <p className="t-label mt-4">{relation}</p>
-      <p className="t-caps mt-1" style={{ letterSpacing: "0.18em" }}>
+      {/* Balanced so a long honorific splits evenly instead of orphaning the
+          surname on a line of its own. */}
+      <p
+        className="t-caps mx-auto mt-1 max-w-[20rem] text-balance"
+        style={{ letterSpacing: "0.16em" }}
+      >
         {parents}
       </p>
     </div>

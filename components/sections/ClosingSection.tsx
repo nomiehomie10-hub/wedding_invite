@@ -1,11 +1,17 @@
 import Image from "next/image";
 import { images } from "@/data/images";
-import { coupleNames, wedding } from "@/data/wedding";
+import { wedding } from "@/data/wedding";
 import { Ornament, OrnamentMinor } from "@/components/ui/Ornament";
 import { Reveal } from "@/components/ui/Reveal";
+import { nameSize } from "@/lib/nameFit";
 
 /** The last panel. Nothing after it — the invitation simply ends. */
 export function ClosingSection() {
+  const { groom, bride } = wedding;
+  // First names here: the sign-off is the couple speaking, not the
+  // invitation addressing its guests.
+  const size = nameSize("closing", groom.shortName, bride.shortName);
+
   return (
     <section
       className="stage stage-last relative overflow-hidden"
@@ -25,12 +31,27 @@ export function ClosingSection() {
       <div className="column relative text-center">
         <Reveal>
           <p className="t-caps">With love,</p>
-          <h2
-            id="closing-heading"
-            className="t-script mt-3 text-espresso"
-            style={{ fontSize: "clamp(2.2rem, 10vw, 3.4rem)" }}
-          >
-            {coupleNames}
+          {/*
+           * Stacked rather than set as one string: run inline, a long name
+           * wraps and leaves the ampersand stranded at the end of a line.
+           * This also echoes the hero, where the pair is introduced the same
+           * way.
+           */}
+          <h2 id="closing-heading" className="mt-3 text-espresso">
+            <span className="t-script block" style={{ fontSize: size }}>
+              {groom.shortName}
+            </span>
+            <span
+              className="block font-serif text-gold-antique italic"
+              style={{ fontSize: "clamp(1rem, 3.6vw, 1.3rem)", margin: "0.1em 0" }}
+              aria-hidden="true"
+            >
+              &amp;
+            </span>
+            <span className="sr-only">and</span>
+            <span className="t-script block" style={{ fontSize: size }}>
+              {bride.shortName}
+            </span>
           </h2>
         </Reveal>
 

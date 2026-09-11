@@ -14,14 +14,21 @@ export const wedding = {
     name: "Barat",
   },
 
+  /*
+   * Two names each. `name` is the formal one, used where the invitation
+   * addresses its guests — the hero and the printed panel. `shortName` is used
+   * where the tone turns personal, which at present is only the sign-off.
+   */
   groom: {
-    name: "Farhan",
+    name: "Farhanullah Khan",
+    shortName: "Farhan",
     initial: "F",
-    parents: "Mr. & Mrs. Major (Retired) Shahid",
+    parents: "Mr. & Mrs. Major (Retired) Shahid Ashraf",
   },
 
   bride: {
-    name: "Dr. Sobia",
+    name: "Dr. Sobia Marium",
+    shortName: "Sobia",
     initial: "S",
     parents: "Mr. & Mrs. Lt. Col (Retired) Ghulam Farooq",
   },
@@ -101,5 +108,5 @@ export type WeddingEvent = Wedding["events"][number];
 /** "F & S" — used on the wax seal and the closing monogram. */
 export const monogram = `${wedding.groom.initial} & ${wedding.bride.initial}`;
 
-/** "Farhan & Dr. Sobia" */
+/** Formal pairing, e.g. "Farhanullah Khan & Dr. Sobia Marium". */
 export const coupleNames = `${wedding.groom.name} & ${wedding.bride.name}`;
