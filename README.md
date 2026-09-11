@@ -105,6 +105,14 @@ public/images/       generated, optimised WebP
 npm run typecheck
 npm run lint
 npm run build
+```
+
+The browser-driven checks need Playwright, which is deliberately **not** a
+dependency — its postinstall pulls ~150 MB of browsers, and Vercel runs
+devDependency install scripts on every deploy. Install it on demand:
+
+```bash
+npm i -D playwright && npx playwright install chromium
 
 npm start                    # then, against the running server:
 npm run verify               # 24 behavioural checks
