@@ -24,7 +24,7 @@ export const wedding = {
     shortName: "Farhan",
     initial: "F",
     relation: "Son of",
-    parents: "Mr. & Mrs. Major (R) Shahid Ashraf",
+    parents: "Mr. & Mrs. Maj (R) Shahid Ashraf",
   },
 
   bride: {
