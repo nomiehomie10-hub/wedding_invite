@@ -32,7 +32,7 @@ export const wedding = {
     shortName: "Sobia",
     initial: "S",
     relation: "Daughter of",
-    parents: "Mr. & Mrs. Col (R) Ghulam Farooq Babai",
+    parents: "Mr. & Mrs. Lt Col (R) Ghulam Farooq Jan",
   },
 
   date: {
@@ -73,7 +73,7 @@ export const wedding = {
    */
   memorial: {
     lead: "On this special day, we carry with us the love and memories of our beloved father,",
-    name: "Late Col Ghulam Farooq Babai",
+    name: "Late Lt Col Ghulam Farooq Jan",
     tail: "whose presence we miss dearly and whose blessings we hold forever in our hearts.",
   },
 
